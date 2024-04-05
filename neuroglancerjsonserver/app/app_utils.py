@@ -1,4 +1,3 @@
-import os
 from flask import current_app
 from neuroglancerjsonserver.backend import database
 from google.auth import credentials
