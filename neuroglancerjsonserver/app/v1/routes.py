@@ -75,19 +75,19 @@ def add_json():
     return common.add_json()
 
 
-@bp.route("/property/<json_id>", methods=["GET"])
+@bp.route("/property/<json_id>/info", methods=["GET"])
 @auth_required
 def get_property(json_id):
     return common.get_property(json_id)
 
 
-@bp.route("/property/post/<json_id>", methods=["POST", "GET"])
+@bp.route("/property/post", methods=["POST", "GET"])
 @auth_required
 def add_property(json_id):
     return common.add_property(json_id)
 
 
-@bp.route("/raw/property/<json_id>", methods=["GET"])
+@bp.route("/property/raw/<json_id>", methods=["GET"])
 @auth_required
 def get_raw_property(json_id):
     return common.get_raw_property(json_id)
@@ -101,7 +101,7 @@ def add_json_with_id(json_id):
     return common.add_json(int(json_id), timestamp=timestamp)
 
 
-@bp.route("/post/property/<json_id>", methods=["POST", "GET"])
+@bp.route("/property/post/<json_id>", methods=["POST", "GET"])
 @auth_requires_admin
 def add_property_with_id(json_id):
     timestamp = float(request.args.get("timestamp", time.time()))
