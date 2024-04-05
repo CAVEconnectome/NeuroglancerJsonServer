@@ -101,7 +101,7 @@ def add_json_with_id(json_id):
     return common.add_json(int(json_id), timestamp=timestamp)
 
 
-@bp.route("post/property/<json_id>", methods=["POST", "GET"])
+@bp.route("/post/property/<json_id>", methods=["POST", "GET"])
 @auth_requires_admin
 def add_property_with_id(json_id):
     timestamp = float(request.args.get("timestamp", time.time()))
