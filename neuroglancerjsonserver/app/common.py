@@ -5,7 +5,6 @@ import time
 
 from neuroglancerjsonserver.app import app_utils
 from neuroglancerjsonserver import __version__
-import subprocess
 
 
 __api_versions__ = [0]
