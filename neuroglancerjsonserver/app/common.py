@@ -14,23 +14,13 @@ __api_versions__ = [0]
 # -------------------------------
 # ------ Access control and index
 # -------------------------------
-def get_git_tag():
-    try:
-        __tag = (
-            subprocess.check_output(["git", "describe", "--tags"])
-            .strip()
-            .decode("utf-8")
-        )
-        return tag
-    except subprocess.CalledProcessError:
-        return "None"
 
 
 __tag__ = get_git_tag()
 
 
 def index():
-    return f"NeuroglancerJsonServer - v{__version__} - tag {__tag__} "
+    return f"NeuroglancerJsonServer - v{__version__}"
 
 
 def home():
