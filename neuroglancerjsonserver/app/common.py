@@ -107,6 +107,35 @@ def add_json(json_id=None, timestamp=None):
 
     return jsonify("{}/{}".format(url_base, json_id))
 
+def get_properties(json_id):
+    db = app_utils.get_property_db()
+
+    json_data = db.get_json(int(json_id), decompress=True)
+
+    return jsonify(json.loads(json_data))
+
+def get_raw_properties(json_id):
+    db = app_utils.get_property_db()
+
+    json_data = db.get_json(int(json_id), decompress=False)
+
+    return json_data
+
+def add_properties(json_id=None, timestamp=None):
+    user_id = str(g.auth_user["id"])
+    db = app_utils.get_property_db()
+
+    # Verify that data is json
+    try:
+        _ = json.loads(request.data)
+    except ValueError:
+        raise ValueError
+
+    json_id = db.add_json(request.data, user_id=user_id, 
+                          json_id=json_id, date=timestamp)
+    url_base = request.url.strip("/").rsplit("/", 1)[0]
+
+    return jsonify("{}/{}".format(url_base, json_id))
 
 def table_info():
     user_id = str(g.auth_user["id"])

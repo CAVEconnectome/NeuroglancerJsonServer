@@ -12,6 +12,7 @@ class DoNothingCreds(credentials.Credentials):
     def refresh(self, request):
         pass
 
+
 def get_datastore_client(config):
     project_id = config.get("PROJECT_ID", None)
 
@@ -22,16 +23,29 @@ def get_datastore_client(config):
     else:
         credentials, project_id = default_creds()
 
-    client = datastore.Client(project=project_id,
-                              credentials=credentials,
-                              namespace=config.get("TABLE_NAME"))
+    client = datastore.Client(
+        project=project_id, credentials=credentials, namespace=config.get("TABLE_NAME")
+    )
     return client
 
 
 def get_json_db():
     if "json_db" not in CACHE:
         client = get_datastore_client(current_app.config)
-        CACHE["json_db"] = database.JsonDataBase(client=client,
-                                                 table_name=current_app.config.get("TABLE_NAME"))
+        CACHE["json_db"] = database.JsonDataBase(
+            client=client, table_name=current_app.config.get("TABLE_NAME")
+        )
 
     return CACHE["json_db"]
+
+
+def get_property_db():
+    if "property_db" not in CACHE:
+        client = get_datastore_client(current_app.config)
+        CACHE["property_db"] = database.PropertyDataBase(
+            client=client,
+            table_name=current_app.config.get("TABLE_NAME"),
+            column="segment_properties",
+        )
+
+    return CACHE["property_db"]
