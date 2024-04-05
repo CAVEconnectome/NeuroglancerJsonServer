@@ -83,8 +83,8 @@ def get_property(json_id):
 
 @bp.route("/property/post", methods=["POST", "GET"])
 @auth_required
-def add_property(json_id):
-    return common.add_property(json_id)
+def add_property():
+    return common.add_property()
 
 
 @bp.route("/property/raw/<json_id>", methods=["GET"])
