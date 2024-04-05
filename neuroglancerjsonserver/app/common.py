@@ -16,9 +16,6 @@ __api_versions__ = [0]
 # -------------------------------
 
 
-__tag__ = get_git_tag()
-
-
 def index():
     return f"NeuroglancerJsonServer - v{__version__}"
 
