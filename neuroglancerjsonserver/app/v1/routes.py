@@ -55,6 +55,10 @@ def unhandled_exception(e):
 # -------------------
 # ------ Applications
 # -------------------
+@bp.route("/version", methods=["GET"])
+@auth_required
+def handle_version():
+    return common.handle_version()
 
 
 @bp.route("/<json_id>", methods=["GET"])

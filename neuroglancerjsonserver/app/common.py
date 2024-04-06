@@ -6,13 +6,14 @@ import time
 from neuroglancerjsonserver.app import app_utils
 from neuroglancerjsonserver import __version__
 
-
 __api_versions__ = [0]
 
 
 # -------------------------------
 # ------ Access control and index
 # -------------------------------
+def handle_version():
+    return jsonify(__version__)
 
 
 def index():
