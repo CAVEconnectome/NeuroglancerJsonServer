@@ -135,11 +135,11 @@ def get_properties(json_id):
     db = app_utils.get_property_db()
     accept_encoding = request.headers.get("Accept-Encoding", "")
 
-    json_data = db.get_json(int(json_id), decompress="gzip" not in accept_encoding)
+    json_data = db.get_json(int(json_id), decompress="deflate" not in accept_encoding)
 
     response = make_response(json_data)
     if "gzip" in accept_encoding:
-        response.headers["Content-Encoding"] = "gzip"
+        response.headers["Content-Encoding"] = "deflate"
 
     response.headers["Content-Type"] = "application/json"
     response.headers["Content-Length"] = len(json_data)
