@@ -133,10 +133,19 @@ def add_json(json_id=None, timestamp=None):
 
 def get_properties(json_id):
     db = app_utils.get_property_db()
+    accept_encoding = request.headers.get("Accept-Encoding", "")
 
-    json_data = db.get_json(int(json_id), decompress=True)
+    json_data = db.get_json(int(json_id), decompress="gzip" not in accept_encoding)
 
-    return jsonify(json.loads(json_data))
+    response = make_response(json_data)
+    if "gzip" in accept_encoding:
+        response.headers["Content-Encoding"] = "gzip"
+
+    response.headers["Content-Type"] = "application/json"
+    response.headers["Content-Length"] = len(json_data)
+    response.headers["Vary"] = "Accept-Encoding"
+
+    return response
 
 
 def get_raw_properties(json_id):
