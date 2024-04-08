@@ -97,12 +97,25 @@ def unhandled_exception(e):
 # -------------------
 
 
+def get_json_from_db(json_id, db):
+    accept_encoding = request.headers.get("Accept-Encoding", "")
+
+    json_data = db.get_json(int(json_id), decompress="deflate" not in accept_encoding)
+
+    response = make_response(json_data)
+    if "gzip" in accept_encoding:
+        response.headers["Content-Encoding"] = "deflate"
+
+    response.headers["Content-Type"] = "application/json"
+    response.headers["Content-Length"] = len(json_data)
+    response.headers["Vary"] = "Accept-Encoding"
+
+    return response
+
+
 def get_json(json_id):
     db = app_utils.get_json_db()
-
-    json_data = db.get_json(int(json_id), decompress=True)
-
-    return jsonify(json.loads(json_data))
+    return get_json_from_db(json_id, db)
 
 
 def get_raw_json(json_id):
@@ -133,19 +146,7 @@ def add_json(json_id=None, timestamp=None):
 
 def get_properties(json_id):
     db = app_utils.get_property_db()
-    accept_encoding = request.headers.get("Accept-Encoding", "")
-
-    json_data = db.get_json(int(json_id), decompress="deflate" not in accept_encoding)
-
-    response = make_response(json_data)
-    if "gzip" in accept_encoding:
-        response.headers["Content-Encoding"] = "deflate"
-
-    response.headers["Content-Type"] = "application/json"
-    response.headers["Content-Length"] = len(json_data)
-    response.headers["Vary"] = "Accept-Encoding"
-
-    return response
+    return get_json_from_db(json_id, db)
 
 
 def get_raw_properties(json_id):
@@ -170,7 +171,6 @@ def add_properties(json_id=None, timestamp=None):
         request.data, user_id=user_id, json_id=json_id, date=timestamp
     )
     url_base = request.url.strip("/").rsplit("/", 1)[0]
-
     return jsonify("{}/{}".format(url_base, json_id))
 
 
