@@ -2,6 +2,7 @@ import os
 import zlib
 import datetime
 from google.cloud import datastore
+from datastoreflex import DatastoreFlex
 
 HOME = os.path.expanduser("~")
 
@@ -19,7 +20,7 @@ class JsonDataBase(object):
             self._client = client
         else:
             assert project_id is not None
-            self._client = datastore.Client(project=project_id, credentials=credentials)
+            self._client = DatastoreFlex(project=project_id,  credentials=credentials)
 
         self._namespace = table_name
         self._column = column
