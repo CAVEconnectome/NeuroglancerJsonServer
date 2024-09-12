@@ -8,9 +8,10 @@ from google.cloud import datastore
 HOME = os.path.expanduser("~")
 
 # Setting environment wide credential path
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
-    HOME + "/.cloudvolume/secrets/google-secret.json"
-)
+if "GOOGLE_APPLICATION_CREDENTIALS" not in os.environ:
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
+        HOME + "/.cloudvolume/secrets/google-secret.json"
+    )
 
 
 class JsonDataBase(object):
@@ -26,7 +27,9 @@ class JsonDataBase(object):
             self._client = client
         else:
             assert project_id is not None
-            self._client = DatastoreFlex(project=project_id, credentials=credentials)
+            self._client = DatastoreFlex(
+                project=project_id, credentials=credentials, namespace=table_name
+            )
 
         self._namespace = table_name
         self._columns = columns
@@ -70,8 +73,8 @@ class JsonDataBase(object):
 
         # always put into the first column for new data
         # could play with different schemes here in the future
-        entity[self.columns[0]] = zlib.compress(json_data)
-        
+        entity[self.json_columns[0]] = zlib.compress(json_data)
+
         entity["access_counter"] = int(1)
         entity["user_id"] = user_id
 
