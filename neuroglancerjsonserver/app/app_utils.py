@@ -1,8 +1,9 @@
+from datastoreflex import DatastoreFlex
 from flask import current_app
-from neuroglancerjsonserver.backend import database
 from google.auth import credentials
 from google.auth import default as default_creds
-from google.cloud import datastore
+
+from neuroglancerjsonserver.backend import database
 
 CACHE = {}
 
@@ -22,7 +23,7 @@ def get_datastore_client(config):
     else:
         credentials, project_id = default_creds()
 
-    client = datastore.Client(
+    client = DatastoreFlex(
         project=project_id, credentials=credentials, namespace=config.get("TABLE_NAME")
     )
     return client
