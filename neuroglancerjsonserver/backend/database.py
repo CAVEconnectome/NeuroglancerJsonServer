@@ -104,7 +104,10 @@ class JsonDataBase(object):
         found_column = None
         for column in self.json_columns:
             if column in entity.keys():
-                found_column = column
+                if entity.get(column) is None:
+                    continue
+                else:
+                    found_column = column
                 break
         if found_column is None:
             raise ValueError(
