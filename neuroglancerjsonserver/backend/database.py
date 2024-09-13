@@ -95,11 +95,7 @@ class JsonDataBase(object):
 
         return entity.key.id
 
-    def get_json(self, json_id, decompress=True):
-        key = self.client.key(self.kind, json_id, namespace=self.namespace)
-
-        entity = self.client.get(key)
-
+    def _find_json_column(self, entity: datastore.Entity):
         # look for the JSON data in decreasing order of precedence
         found_column = None
         for column in self.json_columns:
@@ -109,6 +105,16 @@ class JsonDataBase(object):
                 else:
                     found_column = column
                 break
+
+        return found_column
+
+    def get_json(self, json_id, decompress=True):
+        key = self.client.key(self.kind, json_id, namespace=self.namespace)
+
+        entity = self.client.get(key)
+
+        found_column = self._find_json_column(entity)
+
         if found_column is None:
             raise ValueError(
                 f"[{self.namespace}][{key}][{json_id}] No JSON data found."
