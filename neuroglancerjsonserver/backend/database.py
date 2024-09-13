@@ -73,7 +73,6 @@ class JsonDataBase(object):
 
         # always put into the first column for new data
         # could play with different schemes here in the future
-        # TODO is this compression necessary anymore, since CV will do its own?
         entity[self.json_columns[0]] = zlib.compress(json_data)
 
         entity["access_counter"] = int(1)
