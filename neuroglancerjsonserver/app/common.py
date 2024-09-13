@@ -165,7 +165,7 @@ def add_properties(json_id=None, timestamp=None):
     try:
         _ = json.loads(request.data)
     except ValueError:
-        raise ValueError
+        raise ValueError("Input data is not JSON")
 
     json_id = db.add_json(
         request.data, user_id=user_id, json_id=json_id, date=timestamp
