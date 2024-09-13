@@ -6,6 +6,7 @@ from datastoreflex import DatastoreFlex
 from google.cloud import datastore
 
 HOME = os.path.expanduser("~")
+MAX_JSON_SIZE = 52_428_800  # 50 x 1024 x 1024 bytes = ~50MB
 
 # Setting environment wide credential path
 if "GOOGLE_APPLICATION_CREDENTIALS" not in os.environ:
@@ -73,7 +74,12 @@ class JsonDataBase(object):
 
         # always put into the first column for new data
         # could play with different schemes here in the future
-        entity[self.json_columns[0]] = zlib.compress(json_data)
+        json_bytes = zlib.compress(json_data)
+        if len(json_bytes) > MAX_JSON_SIZE:
+            raise ValueError(
+                f"JSON data too large, must be compressible to <{MAX_JSON_SIZE} bytes."
+            )
+        entity[self.json_columns[0]] = json_bytes
 
         entity["access_counter"] = int(1)
         entity["user_id"] = user_id
