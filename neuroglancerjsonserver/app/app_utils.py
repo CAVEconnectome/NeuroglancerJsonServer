@@ -33,7 +33,9 @@ def get_json_db():
     if "json_db" not in CACHE:
         client = get_datastore_client(current_app.config)
         CACHE["json_db"] = database.JsonDataBase(
-            client=client, table_name=current_app.config.get("TABLE_NAME")
+            client=client,
+            table_name=current_app.config.get("TABLE_NAME"),
+            columns=["v2", "v1"],
         )
 
     return CACHE["json_db"]
@@ -45,7 +47,7 @@ def get_property_db():
         CACHE["property_db"] = database.JsonDataBase(
             client=client,
             table_name=current_app.config.get("TABLE_NAME"),
-            column="segment_properties",
+            columns=["segment_properties"],
         )
 
     return CACHE["property_db"]
