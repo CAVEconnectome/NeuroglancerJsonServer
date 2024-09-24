@@ -1,3 +1,3 @@
 sleep 10
 
-python -m configure_bucket.py
+python configure_bucket.py
