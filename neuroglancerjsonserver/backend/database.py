@@ -84,7 +84,7 @@ class JsonDataBase(object):
         entity["access_counter"] = int(1)
         entity["user_id"] = user_id
 
-        now = datetime.datetime.now(datetime.UTC)
+        now = datetime.datetime.utcnow()
         if date is None:
             date = now
 
@@ -130,7 +130,7 @@ class JsonDataBase(object):
         else:
             entity["access_counter"] = int(2)
 
-        entity["date_last"] = datetime.datetime.now(datetime.UTC)
+        entity["date_last"] = datetime.datetime.utcnow()
 
         self.client.put(entity)
 
