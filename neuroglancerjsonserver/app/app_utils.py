@@ -1,8 +1,9 @@
+from datastoreflex import DatastoreFlex
 from flask import current_app
-from neuroglancerjsonserver.backend import database
 from google.auth import credentials
 from google.auth import default as default_creds
-from google.cloud import datastore
+
+from neuroglancerjsonserver.backend import database
 
 CACHE = {}
 
@@ -22,7 +23,7 @@ def get_datastore_client(config):
     else:
         credentials, project_id = default_creds()
 
-    client = datastore.Client(
+    client = DatastoreFlex(
         project=project_id, credentials=credentials, namespace=config.get("TABLE_NAME")
     )
     return client
@@ -32,7 +33,9 @@ def get_json_db():
     if "json_db" not in CACHE:
         client = get_datastore_client(current_app.config)
         CACHE["json_db"] = database.JsonDataBase(
-            client=client, table_name=current_app.config.get("TABLE_NAME")
+            client=client,
+            table_name=current_app.config.get("TABLE_NAME"),
+            columns=["v2", "v1"],
         )
 
     return CACHE["json_db"]
@@ -44,7 +47,7 @@ def get_property_db():
         CACHE["property_db"] = database.JsonDataBase(
             client=client,
             table_name=current_app.config.get("TABLE_NAME"),
-            column="segment_properties",
+            columns=["segment_properties"],
         )
 
     return CACHE["property_db"]
