@@ -17,3 +17,4 @@ class BaseConfig(object):
     TABLE_NAME = os.environ.get("JSON_DB_TABLE_NAME")
 
     PROJECT_ID = os.environ.get("PROJECT_ID")
+    NGLSTATE_BUCKET_PATH = os.environ.get("NGLSTATE_BUCKET_PATH")

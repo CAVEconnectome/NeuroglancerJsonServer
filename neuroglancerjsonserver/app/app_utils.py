@@ -31,6 +31,14 @@ def get_datastore_client(config):
 
 def get_json_db():
     if "json_db" not in CACHE:
+        bucket_path = current_app.config.get("NGLSTATE_BUCKET_PATH")
+        if bucket_path:
+            CACHE["json_db"] = database.S3JsonDataBase(
+                bucket_path=bucket_path,
+                table_name=current_app.config.get("TABLE_NAME"),
+                columns=["v2", "v1"],
+            )
+            return CACHE["json_db"]
         client = get_datastore_client(current_app.config)
         CACHE["json_db"] = database.JsonDataBase(
             client=client,
@@ -43,6 +51,14 @@ def get_json_db():
 
 def get_property_db():
     if "property_db" not in CACHE:
+        bucket_path = current_app.config.get("NGLSTATE_BUCKET_PATH")
+        if bucket_path:
+            CACHE["property_db"] = database.S3JsonDataBase(
+                bucket_path=bucket_path,
+                table_name=current_app.config.get("TABLE_NAME"),
+                columns=["segment_properties"],
+            )
+            return CACHE["property_db"]
         client = get_datastore_client(current_app.config)
         CACHE["property_db"] = database.JsonDataBase(
             client=client,
